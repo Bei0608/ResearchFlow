@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "environment": "demo",
+  "dataset_id": "demo-agent-evaluation",
+  "version": "1.0.0",
+  "status": "published_fixture",
+  "content_origin": "original_synthetic_project_fixture",
+  "cases": [
+    {
+      "case_id": "demo_eval_001",
+      "question": "人工评分草稿是否应该进入正式分数均值？",
+      "expected_route": "answer",
+      "expected_keywords": ["草稿", "不进入", "进度"],
+      "expected_sources": ["agent_evaluation_basics.md"]
+    },
+    {
+      "case_id": "demo_eval_002",
+      "question": "已提交的人工评分需要纠错时应该怎么处理？",
+      "expected_route": "answer",
+      "expected_keywords": ["新修订", "保留", "旧"],
+      "expected_sources": ["agent_evaluation_basics.md", "versioned_review_workflow.md"]
+    },
+    {
+      "case_id": "demo_eval_003",
+      "question": "评测报告为什么必须显示缺失数量？",
+      "expected_route": "answer",
+      "expected_keywords": ["未完成", "完成率"],
+      "expected_sources": ["agent_evaluation_basics.md"]
+    },
+    {
+      "case_id": "demo_eval_004",
+      "question": "这两份资料规定生产环境必须使用哪一种GPU？",
+      "expected_route": "insufficient",
+      "expected_keywords": [],
+      "expected_sources": []
+    }
+  ]
+}
+

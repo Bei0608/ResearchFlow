@@ -1,0 +1,139 @@
+[
+  {
+    "id": "rt1_001", "type": "fact",
+    "question": "RT-1模型的核心网络结构是什么？",
+    "expected_documents": ["Brohan 等 - 2023 - RT-1 Robotics Transformer for Real-World Control at Scale.pdf"],
+    "answer_points": ["EfficientNet", "TokenLearner", "Transformer"], "should_answer": true
+  },
+  {
+    "id": "rt1_002", "type": "fact",
+    "question": "RT-1论文使用了多大规模的机器人数据集？",
+    "expected_documents": ["Brohan 等 - 2023 - RT-1 Robotics Transformer for Real-World Control at Scale.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "rt2_001", "type": "fact",
+    "question": "RT-2如何将机器人动作表示为语言模型可以生成的形式？",
+    "expected_documents": ["Brohan 等 - RT-2 Vision-Language-Action Models Transfer Web Knowledge to Robotic Control.pdf"],
+    "answer_points": ["动作token"], "should_answer": true
+  },
+  {
+    "id": "rt2_002", "type": "fact",
+    "question": "RT-2如何把互联网视觉语言知识迁移到机器人控制？",
+    "expected_documents": ["Brohan 等 - RT-2 Vision-Language-Action Models Transfer Web Knowledge to Robotic Control.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "palme_001", "type": "fact",
+    "question": "PaLM-E如何将连续的传感器输入接入语言模型？",
+    "expected_documents": ["Driess 等 - PaLM-E An Embodied Multimodal Language Model.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "palme_002", "type": "fact",
+    "question": "PaLM-E中的embodied multimodal language model是什么？",
+    "expected_documents": ["Driess 等 - PaLM-E An Embodied Multimodal Language Model.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "roboagent_001", "type": "fact",
+    "question": "RoboAgent如何通过semantic augmentations提高泛化能力？",
+    "expected_documents": ["Bharadhwaj 等 - 2024 - RoboAgent Generalization and Efficiency in Robot Manipulation via Semantic Augmentations and Action.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "roboagent_002", "type": "fact",
+    "question": "RoboAgent采用了怎样的action representation来提升操作效率？",
+    "expected_documents": ["Bharadhwaj 等 - 2024 - RoboAgent Generalization and Efficiency in Robot Manipulation via Semantic Augmentations and Action.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "palix_001", "type": "fact",
+    "question": "PaLI-X研究如何扩展多语言视觉语言模型？",
+    "expected_documents": ["Chen 等 - 2023 - PaLI-X On Scaling up a Multilingual Vision and Language Model.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "palix_002", "type": "fact",
+    "question": "PaLI-X支持哪些视觉语言任务？",
+    "expected_documents": ["Chen 等 - 2023 - PaLI-X On Scaling up a Multilingual Vision and Language Model.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "rtx_001", "type": "fact",
+    "question": "Open X-Embodiment数据集为什么要汇集不同机器人的数据？",
+    "expected_documents": ["Collaboration 等 - 2025 - Open X-Embodiment Robotic Learning Datasets and RT-X Models.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "rtx_002", "type": "fact",
+    "question": "RT-X模型如何利用跨机器人数据改善泛化能力？",
+    "expected_documents": ["Collaboration 等 - 2025 - Open X-Embodiment Robotic Learning Datasets and RT-X Models.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "malmm_001", "type": "fact",
+    "question": "MALMM为什么使用多个大语言模型智能体完成零样本机器人操作？",
+    "expected_documents": ["Singh 等 - 2025 - MALMM Multi-Agent Large Language Models for Zero-Shot Robotics Manipulation.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "malmm_002", "type": "fact",
+    "question": "MALMM中的不同智能体分别承担什么角色？",
+    "expected_documents": ["Singh 等 - 2025 - MALMM Multi-Agent Large Language Models for Zero-Shot Robotics Manipulation.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "twoarms_001", "type": "fact",
+    "question": "Embodied AI with Two Arms如何兼顾零样本学习、安全性和模块化？",
+    "expected_documents": ["Varley 等 - 2024 - Embodied AI with Two Arms Zero-shot Learning, Safety and Modularity.pdf"],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "compare_001", "type": "comparison",
+    "question": "RT-1与RT-2在训练数据和泛化能力方面有什么区别？",
+    "expected_documents": [
+      "Brohan 等 - 2023 - RT-1 Robotics Transformer for Real-World Control at Scale.pdf",
+      "Brohan 等 - RT-2 Vision-Language-Action Models Transfer Web Knowledge to Robotic Control.pdf"
+    ],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "compare_002", "type": "comparison",
+    "question": "PaLM-E与RT-2对视觉、语言和机器人信息的融合方式有什么不同？",
+    "expected_documents": [
+      "Driess 等 - PaLM-E An Embodied Multimodal Language Model.pdf",
+      "Brohan 等 - RT-2 Vision-Language-Action Models Transfer Web Knowledge to Robotic Control.pdf"
+    ],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "compare_003", "type": "comparison",
+    "question": "RT-1和RT-2分别如何生成机器人动作？",
+    "expected_documents": [
+      "Brohan 等 - 2023 - RT-1 Robotics Transformer for Real-World Control at Scale.pdf",
+      "Brohan 等 - RT-2 Vision-Language-Action Models Transfer Web Knowledge to Robotic Control.pdf"
+    ],
+    "answer_points": [], "should_answer": true
+  },
+  {
+    "id": "unanswerable_001", "type": "unanswerable",
+    "question": "RT-2在RTX 4090上的准确推理延迟是多少？",
+    "expected_documents": [], "answer_points": [], "should_answer": false
+  },
+  {
+    "id": "unanswerable_002", "type": "unanswerable",
+    "question": "PaLM-E在中国某汽车工厂部署后的具体生产成本是多少？",
+    "expected_documents": [], "answer_points": [], "should_answer": false
+  },
+  {
+    "id": "unanswerable_003", "type": "unanswerable",
+    "question": "RT-1在2026年发布的最新商业版本名称是什么？",
+    "expected_documents": [], "answer_points": [], "should_answer": false
+  },
+  {
+    "id": "unanswerable_004", "type": "unanswerable",
+    "question": "杭州明天的天气怎么样？",
+    "expected_documents": [], "answer_points": [], "should_answer": false
+  }
+]

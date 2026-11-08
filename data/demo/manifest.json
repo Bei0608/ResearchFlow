@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "bundle_id": "researchflow-evaluation-demo-v1",
+  "environment": "demo",
+  "origin": "original_synthetic_project_fixture",
+  "redistribution": "permitted_with_researchflow_project",
+  "contains_private_data": false,
+  "contains_human_scores": false,
+  "description": "可在无模型密钥和无版权PDF时使用的最小评测与人工评审数据包。",
+  "files": [
+    "data/demo/manifest.json",
+    "data/demo/README.md",
+    "data/demo/knowledge/agent_evaluation_basics.md",
+    "data/demo/knowledge/versioned_review_workflow.md",
+    "evaluations/demo/evaluation_dataset.json",
+    "evaluations/demo/rubric.json",
+    "evaluations/demo/agent_run.json",
+    "evaluations/demo/program_metrics.json"
+  ]
+}
+

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "environment": "demo",
+  "rubric_id": "grounded-agent-answer",
+  "version": "1.0.0",
+  "status": "published_fixture",
+  "instructions": "只依据展示的资料、证据和候选回答评分。程序指标仅供参考，不替代人工判断。",
+  "criteria": [
+    {
+      "key": "faithfulness",
+      "title": "证据忠实度",
+      "description": "回答中的结论是否由给出的证据支持。",
+      "min_score": 1,
+      "max_score": 5,
+      "weight": 0.5,
+      "required": true
+    },
+    {
+      "key": "completeness",
+      "title": "回答完整度",
+      "description": "是否覆盖问题需要的关键点，且没有用无关内容掩盖缺失。",
+      "min_score": 1,
+      "max_score": 5,
+      "weight": 0.3,
+      "required": true
+    },
+    {
+      "key": "citation_quality",
+      "title": "引用质量",
+      "description": "引用是否存在、可追溯且与结论对应。拒答案例可按正确拒答评分。",
+      "min_score": 1,
+      "max_score": 5,
+      "weight": 0.2,
+      "required": true
+    }
+  ],
+  "human_scores": []
+}
+

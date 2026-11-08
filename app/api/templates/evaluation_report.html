@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ResearchFlow 评测报告</title>
+  <style>
+    :root { color-scheme: light; --ink:#172033; --muted:#637083; --line:#dce2ea; --panel:#f7f9fc; --accent:#3559e0; }
+    * { box-sizing:border-box; } body { margin:0; font-family:system-ui,"Microsoft YaHei",sans-serif; color:var(--ink); background:#eef2f7; }
+    main { max-width:1100px; margin:32px auto; padding:0 20px 48px; } h1,h2 { letter-spacing:-.02em; } h1 { margin-bottom:6px; }
+    .muted { color:var(--muted); } .card { background:white; border:1px solid var(--line); border-radius:14px; padding:20px; margin-top:18px; box-shadow:0 6px 22px rgba(31,45,61,.05); }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; } .stat { background:var(--panel); border-radius:10px; padding:14px; }
+    .stat strong { display:block; font-size:1.45rem; margin-top:4px; overflow-wrap:anywhere; } table { width:100%; border-collapse:collapse; font-size:.92rem; }
+    th,td { padding:10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; } th { color:var(--muted); font-weight:600; }
+    code,pre { white-space:pre-wrap; overflow-wrap:anywhere; } details { border-top:1px solid var(--line); padding:12px 0; }
+    .source { display:inline-block; border-radius:999px; padding:2px 8px; color:white; background:var(--accent); font-size:.78rem; }
+    @media (max-width:720px) { .grid { grid-template-columns:repeat(2,1fr); } table { display:block; overflow-x:auto; } }
+  </style>
+</head>
+<body><main>
+  <h1>ResearchFlow 评测报告</h1>
+  <div class="muted">生成时间：{{ report.calculated_at }} · Schema {{ report.schema_version }}</div>
+  <section class="card">
+    <h2>运行身份</h2>
+    <div class="grid">
+      <div class="stat">运行 ID<strong>{{ report.run.run_id }}</strong></div>
+      <div class="stat">状态<strong>{{ report.run.status }}</strong></div>
+      <div class="stat">Agent<strong>{{ report.run.agent_version }}</strong></div>
+      <div class="stat">数据集<strong>{{ report.run.dataset_version }}</strong></div>
+    </div>
+    <p>应用：{{ report.run.application_name }}；数据集：{{ report.run.dataset_name }}；环境：{{ report.run.environment }}；Git Commit：{{ report.run.git_commit or '未提供' }}</p>
+    <details><summary>配置快照</summary><pre>{{ report.run.config_snapshot | tojson(indent=2) }}</pre></details>
+  </section>
+  <section class="card">
+    <h2>数量与进度</h2>
+    <div class="grid">
+      <div class="stat">案例总数<strong>{{ report.case_counts.total }}</strong></div>
+      <div class="stat">失败案例<strong>{{ report.case_counts.failed }}</strong></div>
+      <div class="stat">已提交评审<strong>{{ report.review_progress.submitted_count }}</strong></div>
+      <div class="stat">完成率<strong>{{ '%.1f%%' | format(report.review_progress.completion_rate * 100) }}</strong></div>
+    </div>
+    <p class="muted">草稿 {{ report.review_progress.draft_count }}；待评审 {{ report.review_progress.pending_count }}。草稿只计进度，不计入人工均值。</p>
+  </section>
+  <section class="card">
+    <h2><span class="source">program</span> 程序指标</h2>
+    <table><thead><tr><th>Evaluator</th><th>指标</th><th>均值</th><th>样本/缺失</th><th>通过率</th></tr></thead><tbody>
+    {% for item in report.program_metrics %}<tr><td>{{ item.evaluator_key }}@{{ item.evaluator_version }}</td><td>{{ item.metric_key }}</td><td>{{ item.value }}</td><td>{{ item.sample_count }} / {{ item.missing_count }}</td><td>{{ item.pass_rate if item.pass_rate is not none else '未配置阈值' }}</td></tr>{% else %}<tr><td colspan="5">没有程序指标</td></tr>{% endfor %}
+    </tbody></table>
+  </section>
+  <section class="card">
+    <h2><span class="source">human</span> 人工指标</h2>
+    <table><thead><tr><th>Rubric</th><th>维度</th><th>均值</th><th>样本/缺失</th><th>评审人数</th><th>通过率</th></tr></thead><tbody>
+    {% for item in report.human_metrics %}<tr><td>{{ item.rubric_version }}</td><td>{{ item.title }} ({{ item.metric_key }})</td><td>{{ item.value }}</td><td>{{ item.sample_count }} / {{ item.missing_count }}</td><td>{{ item.reviewer_count }}</td><td>{{ item.pass_rate if item.pass_rate is not none else '未配置阈值' }}</td></tr>{% else %}<tr><td colspan="6">尚无正式提交的人工评分</td></tr>{% endfor %}
+    </tbody></table>
+  </section>
+  <section class="card"><h2>失败案例</h2>
+    {% for item in report.failed_cases %}<p><strong>{{ item.external_id }}</strong>：{{ item.error }}</p>{% else %}<p>没有失败案例。</p>{% endfor %}
+  </section>
+  <section class="card"><h2>案例追溯</h2>
+    {% for case in report.cases %}<details><summary>{{ case.external_id }} · {{ case.status }}</summary>
+      <h3>输入</h3><pre>{{ case.input_json | tojson(indent=2) }}</pre>
+      <h3>输出</h3><pre>{{ case.output_json | tojson(indent=2) }}</pre>
+      <h3>证据</h3><pre>{{ case.evidence_json | tojson(indent=2) }}</pre>
+      <h3>程序指标</h3><pre>{{ case.program_metrics | tojson(indent=2) }}</pre>
+      <h3>最新有效人工评分</h3><pre>{{ case.human_scores | tojson(indent=2) }}</pre>
+    </details>{% endfor %}
+  </section>
+  <section class="card"><h2>质量门禁</h2>
+    {% if report.gate %}
+      <p><strong>结论：{{ report.gate.status }}</strong>；Policy：{{ report.gate.policy_id }}；Baseline Run：{{ report.gate.baseline_run_id or '未设置' }}</p>
+      <table><thead><tr><th>规则</th><th>来源/指标</th><th>候选值</th><th>基线值</th><th>结果</th><th>原因</th></tr></thead><tbody>
+      {% for item in report.gate.results.rules %}<tr><td>{{ item.rule_id }}</td><td>{{ item.source }} / {{ item.metric_key }}</td><td>{{ item.candidate_value }}</td><td>{{ item.baseline_value }}</td><td>{{ item.status }}</td><td>{{ item.reason }}</td></tr>{% endfor %}
+      </tbody></table>
+    {% else %}<p class="muted">尚未执行Gate Evaluation，本报告不生成隐式综合分或发布结论。</p>{% endif %}
+  </section>
+</main></body></html>

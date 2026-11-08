@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "baseline_id": "researchflow-v1.0-compatibility",
+  "environment": "local_integration",
+  "recorded_at": "2026-11-05T00:00:00+08:00",
+  "reverified_date": "2026-11-06",
+  "description": "P1冻结的V1.0兼容基线，用于确认后续评测平台化没有破坏原有能力。",
+  "program_verification": {
+    "source": "program",
+    "test_suite": {
+      "command": "python -m pytest -q",
+      "passed": 85,
+      "failed": 0
+    },
+    "retrieval": {
+      "command": "python -m scripts.evaluate_retrieval",
+      "answerable_case_count": 18,
+      "skipped_unanswerable_case_count": 4,
+      "hit_at_5": 1.0,
+      "mean_recall_at_5": 1.0,
+      "mrr": 0.972
+    },
+    "answer": {
+      "command": "python -m scripts.evaluate_answers",
+      "case_count": 10,
+      "mean_overall_score": 0.9883333333333333,
+      "route_accuracy": 1.0,
+      "mean_keyword_recall": 0.9666666666666667
+    }
+  },
+  "human_evaluation": null,
+  "notes": [
+    "以上是程序测试和程序评测结果，不是人工评分。",
+    "真实论文评测依赖本地未提交PDF、Milvus和模型服务。",
+    "后续版本必须同时通过当前自动化测试与质量门禁，指标变化需记录原因。"
+  ]
+}

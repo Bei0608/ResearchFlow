@@ -1,0 +1,13 @@
+interface:
+  display_name: "ResearchFlow Paper Research"
+  short_description: "Search embodied-AI papers and produce cited answers"
+  default_prompt: "Use $researchflow-paper-research to answer this paper question with traceable evidence."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "researchflow_mcp"
+      description: "Local ResearchFlow paper retrieval and LangGraph research tools"
+      transport: "streamable_http"
+      url: "http://127.0.0.1:8001/mcp"
+policy:
+  allow_implicit_invocation: true

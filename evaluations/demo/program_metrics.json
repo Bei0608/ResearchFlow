@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "environment": "demo",
+  "run_id": "demo-run-candidate-v1",
+  "source": "program",
+  "generated_at": "2026-11-05T00:00:01Z",
+  "evaluators": [
+    {"key": "route_accuracy", "version": "1.0.0"},
+    {"key": "keyword_recall", "version": "1.0.0"},
+    {"key": "citation_validity", "version": "1.0.0"}
+  ],
+  "case_metrics": [
+    {"case_id": "demo_eval_001", "route_accuracy": 1.0, "keyword_recall": 1.0, "citation_validity": 1.0},
+    {"case_id": "demo_eval_002", "route_accuracy": 1.0, "keyword_recall": 1.0, "citation_validity": 1.0},
+    {"case_id": "demo_eval_003", "route_accuracy": 1.0, "keyword_recall": 0.5, "citation_validity": 1.0},
+    {"case_id": "demo_eval_004", "route_accuracy": 1.0, "keyword_recall": 1.0, "citation_validity": 1.0}
+  ],
+  "summary": {
+    "case_count": 4,
+    "mean_route_accuracy": 1.0,
+    "mean_keyword_recall": 0.875,
+    "mean_citation_validity": 1.0
+  },
+  "human_metrics": null
+}

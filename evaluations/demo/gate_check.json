@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "description": "可重复的离线CI门禁夹具，只包含程序指标，不代表新的模型运行。",
+  "policy": {
+    "rules": [
+      {
+        "rule_id": "citation-validity-min",
+        "source": "program",
+        "namespace_key": "bundled_demo_metrics@1.0.0",
+        "metric_key": "citation_validity",
+        "kind": "absolute_min",
+        "min_value": 0.95
+      },
+      {
+        "rule_id": "keyword-recall-regression",
+        "source": "program",
+        "namespace_key": "bundled_demo_metrics@1.0.0",
+        "metric_key": "keyword_recall",
+        "kind": "max_regression",
+        "max_drop": 0.05
+      }
+    ]
+  },
+  "baseline": {
+    "run": {"run_id": "demo-baseline"},
+    "review_progress": {"completion_rate": 0.0},
+    "program_metrics": [
+      {"namespace_key": "bundled_demo_metrics@1.0.0", "metric_key": "citation_validity", "value": 1.0, "sample_count": 4, "missing_count": 0},
+      {"namespace_key": "bundled_demo_metrics@1.0.0", "metric_key": "keyword_recall", "value": 0.9, "sample_count": 4, "missing_count": 0}
+    ],
+    "human_metrics": []
+  },
+  "candidate": {
+    "run": {"run_id": "demo-candidate"},
+    "review_progress": {"completion_rate": 0.0},
+    "program_metrics": [
+      {"namespace_key": "bundled_demo_metrics@1.0.0", "metric_key": "citation_validity", "value": 1.0, "sample_count": 4, "missing_count": 0},
+      {"namespace_key": "bundled_demo_metrics@1.0.0", "metric_key": "keyword_recall", "value": 0.875, "sample_count": 4, "missing_count": 0}
+    ],
+    "human_metrics": []
+  },
+  "expected_status": "passed"
+}

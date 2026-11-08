@@ -1,0 +1,62 @@
+[
+  {
+    "id": "answer_001",
+    "question": "RT-1模型的核心网络结构是什么？",
+    "should_answer": true,
+    "expected_keywords": ["EfficientNet", "TokenLearner", "Transformer"]
+  },
+  {
+    "id": "answer_002",
+    "question": "RT-2如何将机器人动作表示为语言模型可以生成的形式？",
+    "should_answer": true,
+    "expected_keywords": ["token", "动作"]
+  },
+  {
+    "id": "answer_003",
+    "question": "PaLM-E如何接收连续的视觉或传感器输入？",
+    "should_answer": true,
+    "expected_keywords": ["编码", "语言模型"]
+  },
+  {
+    "id": "answer_004",
+    "question": "Open X-Embodiment数据集解决了什么问题？",
+    "should_answer": true,
+    "expected_keywords": ["机器人", "数据", "泛化"]
+  },
+  {
+    "id": "answer_005",
+    "question": "PaLI-X的主要研究目标是什么？",
+    "should_answer": true,
+    "expected_keywords": ["视觉", "语言", "多语言"]
+  },
+  {
+    "id": "answer_006",
+    "question": "MALMM为什么使用多个大语言模型智能体？",
+    "should_answer": true,
+    "expected_keywords": ["多智能体", "规划", "操作"]
+  },
+  {
+    "id": "answer_007",
+    "question": "RoboAgent如何提高机器人对不同场景的泛化能力？",
+    "should_answer": true,
+    "expected_keywords": ["增强", "泛化"]
+  },
+  {
+    "id": "refuse_001",
+    "question": "RT-2在RTX 4090上的准确推理延迟是多少？",
+    "should_answer": false,
+    "expected_keywords": []
+  },
+  {
+    "id": "refuse_002",
+    "question": "PaLM-E在某中国工厂的部署成本是多少？",
+    "should_answer": false,
+    "expected_keywords": []
+  },
+  {
+    "id": "refuse_003",
+    "question": "杭州明天的天气怎么样？",
+    "should_answer": false,
+    "expected_keywords": []
+  }
+]

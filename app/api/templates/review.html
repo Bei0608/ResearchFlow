@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ResearchFlow 人工评审</title>
+  <style>
+    :root{font-family:system-ui,sans-serif;color:#172033;background:#f4f6fa}body{margin:0}.top{padding:20px 28px;background:#172033;color:#fff}.layout{display:grid;grid-template-columns:280px 1fr;gap:18px;padding:18px}.panel{background:#fff;border:1px solid #dfe4ee;border-radius:12px;padding:18px}.muted{color:#687386}.item{width:100%;text-align:left;padding:10px;margin:5px 0;border:1px solid #dfe4ee;border-radius:8px;background:#fff;cursor:pointer}.item:hover{border-color:#4263eb}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.evidence{background:#f6f8fc;padding:10px;border-radius:8px;margin:7px 0;white-space:pre-wrap}.criterion{border-top:1px solid #edf0f5;padding:12px 0}.criterion input{width:90px}.criterion textarea,textarea{width:100%;box-sizing:border-box}button.primary{background:#3157d5;color:white;border:0;border-radius:7px;padding:9px 14px;margin-right:8px}button.secondary{padding:9px 14px}.error{color:#b42318}.success{color:#067647}@media(max-width:800px){.layout,.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header class="top"><h1>ResearchFlow 人工评审</h1><div>程序指标仅供参考，人工评分独立保存。</div></header>
+<main class="layout">
+  <aside class="panel">
+    <form id="login"><h2>登录</h2><input id="username" placeholder="用户名" required><input id="password" type="password" placeholder="密码" required><button class="primary">登录</button></form>
+    <hr><h2>我的任务</h2><div id="tasks" class="muted">请先登录</div>
+  </aside>
+  <section class="panel"><div id="content"><h2>评审工作台</h2><p class="muted">选择任务和案例后，可保存草稿、重新打开并提交。</p></div><p id="message"></p></section>
+</main>
+<script>
+const api='/api/v1';let token=sessionStorage.getItem('rf_token')||'';let currentTask=null;let currentCase=null;let currentDetail=null;
+const el=(tag,text,cls)=>{const x=document.createElement(tag);if(text!==undefined)x.textContent=text;if(cls)x.className=cls;return x};
+async function call(path,options={}){options.headers={...(options.headers||{}),Authorization:`Bearer ${token}`};const r=await fetch(api+path,options);if(!r.ok){const body=await r.json().catch(()=>({detail:'请求失败'}));throw new Error(body.detail||'请求失败')}return r.status===204?null:r.json()}
+function message(text,ok=false){const x=document.getElementById('message');x.textContent=text;x.className=ok?'success':'error'}
+document.getElementById('login').onsubmit=async e=>{e.preventDefault();const body=new URLSearchParams({username:username.value,password:password.value});try{const r=await fetch(api+'/auth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});if(!r.ok)throw new Error('登录失败');token=(await r.json()).access_token;sessionStorage.setItem('rf_token',token);message('登录成功',true);loadTasks()}catch(err){message(err.message)}};
+async function loadTasks(){if(!token)return;try{const data=await call('/review-tasks/mine');const root=document.getElementById('tasks');root.replaceChildren();data.tasks.forEach(t=>{const b=el('button',`${t.name} · ${t.submitted_count}/${t.total_count}`, 'item');b.onclick=()=>openTask(t.task_id);root.append(b)});if(!data.tasks.length)root.textContent='暂无任务'}catch(err){message(err.message)}}
+async function openTask(id){try{const data=await call(`/review-tasks/${id}`);currentTask=data.task;const root=document.getElementById('content');root.replaceChildren(el('h2',data.task.name),el('p',`进度：${data.task.submitted_count}/${data.task.total_count}`,'muted'));data.cases.forEach(c=>{const b=el('button',`${c.external_id} · ${c.review_status} · r${c.latest_revision}`,'item');b.onclick=()=>openCase(id,c.case_result_id);root.append(b)})}catch(err){message(err.message)}}
+async function openCase(taskId,caseId){try{currentCase=caseId;currentDetail=await call(`/review-tasks/${taskId}/cases/${caseId}`);renderCase()}catch(err){message(err.message)}}
+function renderCase(){const d=currentDetail,c=d.case,root=document.getElementById('content');root.replaceChildren(el('h2',c.external_id));const grid=el('div',undefined,'grid'),left=el('div'),right=el('div');left.append(el('h3','输入'),el('pre',JSON.stringify(c.input,null,2),'evidence'),el('h3','Agent 输出'),el('pre',JSON.stringify(c.output,null,2),'evidence'),el('h3','证据'));c.evidence.forEach(x=>left.append(el('pre',JSON.stringify(x,null,2),'evidence')));right.append(el('h3','程序指标（仅供参考）'),el('pre',JSON.stringify(d.program_metrics,null,2),'evidence'),el('h3','人工量表'));
+const latest=d.revisions.length?d.revisions[d.revisions.length-1]:null;const scoreMap=new Map((latest?.scores||[]).map(x=>[x.criterion_id,x]));d.criteria.forEach(rule=>{const box=el('div',undefined,'criterion');box.append(el('strong',rule.title+(rule.required?' *':'')),el('p',`${rule.description}（${rule.min_score}–${rule.max_score}，权重 ${rule.weight}）`,'muted'));const input=el('input');input.type='number';input.min=rule.min_score;input.max=rule.max_score;input.step='any';input.dataset.criterion=rule.criterion_id;input.value=scoreMap.get(rule.criterion_id)?.score??'';const note=el('textarea');note.dataset.comment=rule.criterion_id;note.placeholder='评分说明';note.value=scoreMap.get(rule.criterion_id)?.comment??'';box.append(input,note);right.append(box)});const overall=el('textarea');overall.id='overall';overall.placeholder='总体意见';overall.value=latest?.overall_comment||'';right.append(overall);const save=el('button','保存草稿','primary');save.onclick=()=>writeReview('draft');const submit=el('button','正式提交','primary');submit.onclick=()=>writeReview('submit');right.append(save,submit);if(c.review_status==='submitted'){const revise=el('button','创建纠错修订','secondary');revise.onclick=startRevision;right.append(revise)}grid.append(left,right);root.append(grid)}
+function payload(){return{expected_revision:currentDetail.case.latest_revision,overall_comment:document.getElementById('overall').value,scores:[...document.querySelectorAll('[data-criterion]')].filter(x=>x.value!=='').map(x=>({criterion_id:x.dataset.criterion,score:Number(x.value),comment:document.querySelector(`[data-comment="${x.dataset.criterion}"]`).value}))}}
+async function writeReview(action){try{await call(`/review-tasks/${currentDetail.task.task_id}/cases/${currentCase}/${action}`,{method:action==='draft'?'PUT':'POST',headers:{'Content-Type':'application/json','Idempotency-Key':crypto.randomUUID()},body:JSON.stringify(payload())});message(action==='draft'?'草稿已保存':'评审已提交',true);await openCase(currentDetail.task.task_id,currentCase)}catch(err){message(err.message)}}
+async function startRevision(){const reason=prompt('请输入修改原因');if(!reason)return;try{await call(`/review-tasks/${currentDetail.task.task_id}/cases/${currentCase}/revisions`,{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':crypto.randomUUID()},body:JSON.stringify({expected_revision:currentDetail.case.latest_revision,reason})});message('已创建纠错草稿',true);await openCase(currentDetail.task.task_id,currentCase)}catch(err){message(err.message)}}
+if(token)loadTasks();
+</script>
+</body></html>

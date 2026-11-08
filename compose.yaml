@@ -1,0 +1,125 @@
+name: researchflow
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: researchflow-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_URI: >-
+        postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      MILVUS_URI: ${MILVUS_DOCKER_URI:-http://host.docker.internal:19530}
+      REDIS_URI: redis://redis:6379/0
+    command:
+      - sh
+      - -c
+      - python -m alembic upgrade head && uvicorn app.api.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./data:/app/data:ro
+      - ./reports/generated:/app/reports/generated
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://localhost:8000/api/v1/health/live', timeout=3)
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: researchflow-mcp
+    restart: unless-stopped
+    command:
+      - python
+      - -m
+      - scripts.run_mcp_server
+      - --transport
+      - streamable-http
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8001"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_URI: >-
+        postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      MILVUS_URI: ${MILVUS_DOCKER_URI:-http://host.docker.internal:19530}
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 8001
+      REDIS_URI: redis://redis:6379/0
+      MCP_AUTH_ENABLED: ${MCP_AUTH_ENABLED:-true}
+    ports:
+      - "127.0.0.1:${MCP_PORT:-8001}:8001"
+    depends_on:
+      api:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./data:/app/data:ro
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: researchflow-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - researchflow_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    shm_size: 128mb
+    stop_grace_period: 30s
+
+  redis:
+    image: redis:8-alpine
+    container_name: researchflow-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - researchflow_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  researchflow_postgres_data:
+    name: researchflow_postgres_data
+  researchflow_redis_data:
+    name: researchflow_redis_data

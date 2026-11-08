@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<evaluation>
+  <qa_pair>
+    <question>先列出完整论文目录，再确认其中参数量为35M且以3Hz输出离散动作的模型。只回答模型名。</question>
+    <answer>RT-1</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>在RT-1论文中，主要机器人示范数据集约包含多少条示范？只回答阿拉伯数字，不使用千位分隔符。</question>
+    <answer>130000</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>RT-1主要数据集由多少台机器人组成的机队采集？只回答阿拉伯数字。</question>
+    <answer>13</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>RT-1主要数据集的采集持续多少个月？只回答阿拉伯数字。</question>
+    <answer>17</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>RT-1模型卡列出的训练任务总数是多少？只回答阿拉伯数字。</question>
+    <answer>744</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>比较RT-1与RT-2：哪一个模型直接把动作向量串接成语言模型可生成的字符串？只回答模型名。</question>
+    <answer>RT-2</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>RT-2为动作预留多少个语言模型token？只回答阿拉伯数字。</question>
+    <answer>256</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>RT-2示例动作字符串由终止命令、6DoF位姿增量和夹爪伸展组成。总共有多少个空格分隔的动作字段？只回答阿拉伯数字。</question>
+    <answer>8</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>哪一个模型把连续观测投影到与语言token相同维度的向量，并像语言token一样注入解码器？只回答模型名。</question>
+    <answer>PaLM-E</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>在知识库三篇论文涉及的模型中，参数量最大的PaLM-E变体名称是什么？只回答完整变体名。</question>
+    <answer>PaLM-E-562B</answer>
+  </qa_pair>
+</evaluation>

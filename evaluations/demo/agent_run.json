@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "environment": "demo",
+  "run_id": "demo-run-candidate-v1",
+  "application_id": "researchflow-demo-agent",
+  "agent_version": "1.0.0-demo",
+  "evaluation_dataset_id": "demo-agent-evaluation",
+  "evaluation_dataset_version": "1.0.0",
+  "rubric_id": "grounded-agent-answer",
+  "rubric_version": "1.0.0",
+  "status": "ready_for_review",
+  "trigger": "bundled_demo_fixture",
+  "git_commit": "demo-fixture-not-a-repository-commit",
+  "generated_at": "2026-11-05T00:00:00Z",
+  "model_execution": "pre_generated_no_external_model_required",
+  "results": [
+    {
+      "case_id": "demo_eval_001",
+      "actual_route": "answer",
+      "answer": "草稿不应该进入正式分数均值，只计入评审进度；正式统计使用已提交评分。[资料1]",
+      "citations": ["资料1"],
+      "evidence": [
+        {
+          "citation": "资料1",
+          "source_file": "agent_evaluation_basics.md",
+          "content": "草稿只用于评审进度，不进入正式分数均值。"
+        }
+      ],
+      "latency_ms": 120,
+      "token_usage": {"input": 210, "output": 42}
+    },
+    {
+      "case_id": "demo_eval_002",
+      "actual_route": "answer",
+      "answer": "应创建新的评分修订并保留旧记录，统计采用最新有效提交，不能直接覆盖原评分。[资料1][资料2]",
+      "citations": ["资料1", "资料2"],
+      "evidence": [
+        {
+          "citation": "资料1",
+          "source_file": "agent_evaluation_basics.md",
+          "content": "提交后的纠错通过新修订完成，不能覆盖旧评分。"
+        },
+        {
+          "citation": "资料2",
+          "source_file": "versioned_review_workflow.md",
+          "content": "已提交评分如需纠错，应创建新的修订并保留旧记录。"
+        }
+      ],
+      "latency_ms": 145,
+      "token_usage": {"input": 235, "output": 50}
+    },
+    {
+      "case_id": "demo_eval_003",
+      "actual_route": "answer",
+      "answer": "缺失数量能说明还有多少案例未完成，避免少量已评分样本的均值被误认为全量结论。[资料1]",
+      "citations": ["资料1"],
+      "evidence": [
+        {
+          "citation": "资料1",
+          "source_file": "agent_evaluation_basics.md",
+          "content": "只展示均值会掩盖未完成案例，因此完成率也是评测结论的一部分。"
+        }
+      ],
+      "latency_ms": 132,
+      "token_usage": {"input": 198, "output": 46}
+    },
+    {
+      "case_id": "demo_eval_004",
+      "actual_route": "insufficient",
+      "answer": "证据不足：当前资料没有规定生产环境必须使用的 GPU 型号。",
+      "citations": [],
+      "evidence": [],
+      "latency_ms": 88,
+      "token_usage": {"input": 175, "output": 27}
+    }
+  ],
+  "human_reviews": []
+}
+

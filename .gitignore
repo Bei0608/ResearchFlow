@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.cache/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+
+# Generated data
+data/vector_store/*
+data/papers/*.pdf
+data/runtime/
+runtime/
+evaluations/results/*
+reports/generated/*
+
+# Local environments and tooling
+.venv/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.log
+
+# Operating system
+.DS_Store
+Thumbs.db
